@@ -46,7 +46,7 @@ const char* ssid = "WiFi-2.4-DBFA"; //"Proximus-Home-33F8";//"G604T_WIRELESS";//
 const char* password = "alixetjc"; //"jcetalix";// "";
 bool LoopEntered = false;
 char ipStr[16];
-ESP8266WebServer server(83);
+ESP8266WebServer server(82);
 
 // ================= SENSORS =================
 
@@ -303,7 +303,8 @@ else {
   WiFi.begin(ssid, password);
   jcbDisplay("Connexion WiFi Router ");
   jcbDisplay(ssid);
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED)
+  {
     delay(500);
     Serial.println("Try to Connect.");
   }
