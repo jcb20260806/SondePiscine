@@ -14,12 +14,13 @@
 // v12 : Diverses Adaptations
 // v13 : Force Local IP Address 192.168.129.200; voir WiFi.config(IPAddress(192, 168, 129, 200), IPAddress(192, 168, 129, 1), IPAddress(255, 255, 255, 0));
 // V14 : change IP to 192.168.129.100:82 pour accès externe
+// v15 : oaramètres réseau comme variables"
+// Branch
 #include "ESP8266WiFi.h"
 #include "ESP8266WebServer.h"
 #include <ESP8266mDNS.h>
 // pour OTA
 #include <ArduinoOTA.h>
-
 // pour BMP etc 
 #include <Wire.h>
 #include <Adafruit_BMP085.h>
@@ -44,9 +45,16 @@ const char* wifiStatusToString(wl_status_t status) {
 // ================= WIFI =================
 const char* ssid = "WiFi-2.4-DBFA"; //"Proximus-Home-33F8";//"G604T_WIRELESS";// non Compatible "Proximus-Home-186132"; //"WiFi-2.4-DBFA"; //"G604T_WIRELESS";
 const char* password = "alixetjc"; //"jcetalix";// "";
+const IPAddress  wifipara1 = IPAddress(192, 168, 129, 100);
+const IPAddress wifipara2= IPAddress(192, 168, 129, 1);
+const IPAddress wifipara3 = IPAddress(255, 255, 255, 0);
+const int wifiport = 82;
+ESP8266WebServer server(wifiport);
+  
+
 bool LoopEntered = false;
 char ipStr[16];
-ESP8266WebServer server(82);
+
 
 // ================= SENSORS =================
 
@@ -281,8 +289,11 @@ else {
     jcbDisplay("LittleFS OK");
 }
     */
-  Serial.begin(115200);
+  Serial.begin(74880);
   Serial.println("Starting...");
+  Serial.print("MAC : ");
+  Serial.println(WiFi.macAddress());
+  
   Wire.begin();
   Wire.setClock(400000);
   display.init();
@@ -299,12 +310,11 @@ else {
   initBMP();
   jcbDisplay("ICI");
   initDS18B20();
-  WiFi.config(IPAddress(192, 168, 129, 100), IPAddress(192, 168, 129, 1), IPAddress(255, 255, 255, 0));
+  WiFi.config(wifipara1,wifipara2,wifipara3);
   WiFi.begin(ssid, password);
   jcbDisplay("Connexion WiFi Router ");
   jcbDisplay(ssid);
-  while (WiFi.status() != WL_CONNECTED)
-  {
+  while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.println("Try to Connect.");
   }
