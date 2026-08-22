@@ -59,7 +59,7 @@ ESP8266WebServer server(wifiport);
 bool LoopEntered = false;
 char ipStr[16];
 // ========== LED ===================
-#define LED_PIN LED_BUILTIN
+const int moduleLed = D4; // GPIO2 (Matches LED_BUILTIN)
 
 
 // ================= SENSORS =================
@@ -300,6 +300,7 @@ else {
   Serial.print("MAC : ");
   Serial.println(WiFi.macAddress());
    // LED éteinte au départ
+  const int LED_PIN = D0; // GPIO2 (Matches LED_BUILTIN)
   digitalWrite(LED_PIN, HIGH);
   
   Wire.begin();

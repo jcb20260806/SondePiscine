@@ -1,0 +1,73 @@
+Oui. Si c'est une **LED tricolore RGB à 4 pattes**, tu peux la piloter avec 3 GPIO de l'ESP8266.
+
+### Branchement
+
+Par exemple avec **D5, D6 et D7** :
+
+```text
+ESP8266 D5 (GPIO14) ── 220Ω ── Rouge
+ESP8266 D6 (GPIO12) ── 220Ω ── Vert
+ESP8266 D7 (GPIO13) ── 220Ω ── Bleu
+
+LED RGB patte commune ───────── GND
+```
+
+Il faut **une résistance par couleur**.
+
+![Image](https://images.openai.com/static-rsc-4/6M1YGi7pFgT6mNbR9EfRacbOSwW3YAL8VCd7vLL7bx5gGHDurfo-Jdk5XTImFxph7HLRoiuVmvEFXV3NACzR6OwHaO5Y22coH215kNlYLwgFBSBT1i3A1ofodNXg-c3uquP_pcXcTaxhFWHMYlPEeJPAj_Ks34tkpPWSne9n-fHU_VloP_Vyb4DgJIT6ueQW?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/hPRPieyNa_Hk-i1ABwKKEv_e_IPcXvIQyM5xuMH4WLeaSOeUU8v7kKFsFcFhjJMse7Sa4WhSiIYga8c5k6BU1D3BzOxo55-lWYO8iIztwsKwP9OCUiPo9HZhf3POTNHXUHTQW8TjCTiLgb7OE-lYG2WWp2GdftTQLJtLTef3KlsHvfX-nGjMjC2_Ft7KKSKh?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/Q9jLDEZ_UHQyngK6YFWeny6wShPkxw6JX0edFkVbXgea93TzR_SxoKQfmHpUG3iVI7e_uHgz0zkqsHouMoa675nJwZ2cCQ8VmXwjqexORzioHjjc8ISYyo7T_u77Bu40WbeqpK5cL4vrcUwuh8LD83U4jQ2B1k4UOd_bV5hpoej4NuJo7twCu5slT3KyrmrE?purpose=fullsize)
+
+### Code si LED RGB à cathode commune
+
+```cpp
+#define LED_R D5
+#define LED_G D6
+#define LED_B D7
+
+void setup() {
+  pinMode(LED_R, OUTPUT);
+  pinMode(LED_G, OUTPUT);
+  pinMode(LED_B, OUTPUT);
+
+  digitalWrite(LED_R, LOW);
+  digitalWrite(LED_G, LOW);
+  digitalWrite(LED_B, LOW);
+}
+```
+
+Par exemple :
+
+```cpp
+// Rouge
+digitalWrite(LED_R, HIGH);
+digitalWrite(LED_G, LOW);
+digitalWrite(LED_B, LOW);
+```
+
+```cpp
+// Vert
+digitalWrite(LED_R, LOW);
+digitalWrite(LED_G, HIGH);
+digitalWrite(LED_B, LOW);
+```
+
+```cpp
+// Bleu
+digitalWrite(LED_R, LOW);
+digitalWrite(LED_G, LOW);
+digitalWrite(LED_B, HIGH);
+```
+
+### Pour ton indication Wi-Fi
+
+Tu pourrais faire :
+
+* 🔴 **Rouge** = pas de connexion
+* 🟠 **Orange** = connexion en cours
+* 🟢 **Vert** = Wi-Fi connecté
+* 🔵 **Bleu** = fonctionnement normal
+
+Si tu me dis si ta LED tricolore est **3 pattes ou 4 pattes**, je peux te donner le branchement exact.

@@ -1,0 +1,73 @@
+Si tu veux connecter un **écran I²C à ton ESP8266**, le branchement standard est très simple.
+
+### ESP8266 NodeMCU → écran I²C
+
+| Écran I²C | ESP8266        |
+| --------- | -------------- |
+| **GND**   | GND            |
+| **VCC**   | 3.3 V          |
+| **SDA**   | **D2 (GPIO4)** |
+| **SCL**   | **D1 (GPIO5)** |
+
+![Image](https://images.openai.com/static-rsc-4/iWpfV9bZLQDwCTppXrOe3Ko9yARygEzKhblJPZUR1c5Sw5COBeqq5jNKQEwvyEHDdnfmZM9cp-UJsAs0LFZ6vzsRJ4qHCXpvDTa_etBKljwWWIZXehmGtQqyOTQij3EtgKATLjyW0d9g8DxqUF2eAVrd6CR2cReWgH2qOWEyFp5nDcarwG0KiYQBNDFlPkql?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/-D3Hc8KDevZKDIbrvEBHtaAoQEpUcny2i3NNnSqSc8CwgDN1IjuR4mXKAjxjGXV3q0-P-vDmp6EtC2J3u07Kj96ciLU8b3kjyOaW4qIvwjgAZsLG0eYPiMJS5Vl3OAWqGMJ6weMvqSmR--0VH_oMS1ufoonn7oGySMPHnasYeZX1hfZg2SD2LyLq9YHvkTiT?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/yM4jDq_R4yfOXAuseaN7P2F51oAnNc5zkZlH2zIgXVTVGFBmu9BEpD18K-bWKVxiUV10Z3b4rO1plu9vbSNsoKwBlaPhgmP9lpG9JdUr5LxKjo21-D_YdLmjrKSdtz49vnWNRFEhn1hf5SnlBUqZYZMmt5ArludK-djP6Y-F2LlpR0TaYRhWXwEh-PpsXNcn?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/mrppcXX8v-lTKS-sl1S_Q_bW4_MJpI08-kFZavFnlX1U39RNB0UkAT1rhI59kcVkG2kGLxwJPNmOkRHr76ODJW9lZXJE6kUhKN1CRVJSX9_jT8JWzLV4Zqei2NZgRRwDRBS9ssc_tAy-h4XxxudeVFOxXBvlG9f-sJ22yBBeFkeo4U1ywYoPn_c6G8ODK4cd?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/hoxP-nWW-rGnNbfavx8VetYZ5Aq0Fog-6wamqFTpUZ-GyYIUAiUqo1L-9NA-k9Rnk3GexCbQ8tVIW29zCcWZEiswYrqOQ_ssOZDm5IkWpgFOiLGb3iFGUbS_yAgJBCk3uii6vj6wEDUoLmPTJY8TNr6zUwOTlZkf2N-xllXK047U3FRLLAKlAPrUaR5DXm_4?purpose=fullsize)
+
+### Exemple avec un OLED SSD1306
+
+Installe les bibliothèques **Adafruit SSD1306** et **Adafruit GFX**, puis :
+
+```cpp
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
+
+void setup() {
+  Serial.begin(115200);
+
+  // SDA = D2, SCL = D1
+  Wire.begin(D2, D1);
+
+  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+    Serial.println("OLED non trouvé");
+    while (true);
+  }
+
+  display.clearDisplay();
+  display.setTextSize(2);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.println("Bonjour!");
+  display.display();
+}
+
+void loop() {
+}
+```
+
+### Vérifier l'adresse I²C
+
+La plupart des petits OLED SSD1306 utilisent :
+
+```text
+0x3C
+```
+
+mais certains utilisent :
+
+```text
+0x3D
+```
+
+Si tu me donnes **le modèle de ton écran I²C** (OLED 0.96", LCD 16x2, LCD 20x4, etc.), je peux te donner le code exact pour ton écran.
