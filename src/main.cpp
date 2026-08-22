@@ -45,10 +45,14 @@ const char* wifiStatusToString(wl_status_t status) {
 // ================= WIFI =================
 const char* ssid = "WiFi-2.4-DBFA"; //"Proximus-Home-33F8";//"G604T_WIRELESS";// non Compatible "Proximus-Home-186132"; //"WiFi-2.4-DBFA"; //"G604T_WIRELESS";
 const char* password = "alixetjc"; //"jcetalix";// "";
-const IPAddress  wifipara1 = IPAddress(192, 168, 129, 100);
+uint8_t DevoloBSSID[] = {0x30, 0xD3, 0x2D, 0x36, 0xC1,0xA4};
+const int DevoloWiFiChannel = 11;
+// const IPAddress  wifipara1 = IPAddress(192, 168, 129, 100); // operationnel
+const IPAddress  wifipara1 = IPAddress(192, 168, 129, 99); // Test avec 2024
 const IPAddress wifipara2= IPAddress(192, 168, 129, 1);
 const IPAddress wifipara3 = IPAddress(255, 255, 255, 0);
 const int wifiport = 82;
+
 ESP8266WebServer server(wifiport);
   
 
@@ -310,15 +314,26 @@ else {
   initBMP();
   jcbDisplay("ICI");
   initDS18B20();
-  WiFi.config(wifipara1,wifipara2,wifipara3);
-  WiFi.begin(ssid, password);
+  
+  if (!WiFi.config(wifipara1,wifipara2,wifipara3)) {
+        Serial.println("Erreur configuration IP");
+    }
+        
+
+  
+  WiFi.begin(ssid, password,DevoloWiFiChannel,DevoloBSSID,true);
   jcbDisplay("Connexion WiFi Router ");
   jcbDisplay(ssid);
   while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
+    delay(5000);
     Serial.println("Try to Connect.");
   }
   //jcbDisplay(wifiStatusToString(WiFi.status()));
+  Serial.print("IP : ");
+  Serial.println(WiFi.localIP());
+
+  Serial.print("BSSID : ");
+  Serial.println(WiFi.BSSIDstr());
  
    IPAddress ip = WiFi.localIP();
    // IPv4 address max length: "255.255.255.255" (15 chars + null terminator);
