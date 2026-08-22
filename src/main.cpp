@@ -58,6 +58,8 @@ ESP8266WebServer server(wifiport);
 
 bool LoopEntered = false;
 char ipStr[16];
+// ========== LED ===================
+#define LED_PIN LED_BUILTIN
 
 
 // ================= SENSORS =================
@@ -297,6 +299,8 @@ else {
   Serial.println("Starting...");
   Serial.print("MAC : ");
   Serial.println(WiFi.macAddress());
+   // LED éteinte au départ
+  digitalWrite(LED_PIN, HIGH);
   
   Wire.begin();
   Wire.setClock(400000);
@@ -327,8 +331,14 @@ else {
   while (WiFi.status() != WL_CONNECTED) {
     delay(5000);
     Serial.println("Try to Connect.");
+    // LED clignote
+    digitalWrite(LED_PIN, LOW);
+    delay(250);
+    digitalWrite(LED_PIN, HIGH);
+    delay(250);
   }
   //jcbDisplay(wifiStatusToString(WiFi.status()));
+  digitalWrite(LED_PIN, LOW);
   Serial.print("IP : ");
   Serial.println(WiFi.localIP());
 
